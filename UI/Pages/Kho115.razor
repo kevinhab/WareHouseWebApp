@@ -1,0 +1,38 @@
+﻿@using WareHouseProject.Domain.Models
+@inject WareHouseProject.Domain.Services.InventoryService InventoryService
+
+@page "/kho115"
+
+<PageTitle>Kho 115</PageTitle>
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5" GutterBottom="true">
+        📦 Danh sách vật tư - Kho 115
+    </MudText>
+
+    <MudTable Items="_dsVatTu" Dense="true" Hover="true" Bordered="true" Striped="true" Elevation="1">
+        <HeaderContent>
+            <MudTh>Mã vật tư</MudTh>
+            <MudTh>Model</MudTh>
+            <MudTh>Tên vật tư</MudTh>
+            <MudTh>Đơn vị tính</MudTh>
+            <MudTh Class="text-end">Số lượng</MudTh>
+        </HeaderContent>
+        <RowTemplate Context="context">
+            <MudTd DataLabel="Mã vật tư">@context.MaVatTu</MudTd>
+            <MudTd DataLabel="Model">@context.Model</MudTd>
+            <MudTd DataLabel="Tên vật tư">@context.TenVatTu</MudTd>
+            <MudTd DataLabel="Đơn vị tính">@context.DonViTinh</MudTd>
+            <MudTd DataLabel="Số lượng" Class="text-end">@context.SoLuong</MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private List<VatTu> _dsVatTu = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _dsVatTu = await InventoryService.GetAllAsync();
+    }
+}
