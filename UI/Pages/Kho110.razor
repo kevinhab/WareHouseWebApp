@@ -1,7 +1,7 @@
 ﻿@using WareHouseProject.Domain.Models
 @inject WareHouseProject.Domain.Services.InventoryService InventoryService
 
-@page "/kho115"
+@page "/kho110"
 
 <PageTitle>Kho @_maKho</PageTitle>
 
@@ -31,14 +31,18 @@
                 <MudTd DataLabel="Số lượng" Class="text-end">@context.SoLuong</MudTd>
             </RowTemplate>
         </MudTable>
-       }
+    }
 </MudPaper>
 
 @code {
     private List<VatTu> _dsVatTu = [];
 
+    private string _maKho;
+
     protected override async Task OnInitializedAsync()
     {
+        _maKho = InventoryService.GetMaKho();
         _dsVatTu = await InventoryService.GetAllAsync();
+
     }
 }

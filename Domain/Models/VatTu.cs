@@ -10,6 +10,10 @@ namespace WareHouseProject.Domain.Models
         public string TenVatTu { get; set; }
         public string DonViTinh { get; set; }
         public int SoLuong { get; set; }
-        public string MaKho { get; set; } = "kho115";
+        public string MaKho { get; set; }
+        public bool CanExport(int soLuong)
+        {
+            return SoLuong >= soLuong;
+        }
     }
 }
