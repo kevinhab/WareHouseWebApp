@@ -4,9 +4,10 @@
 
 @page "/listkho"
 
-<MudPaper Class="pa-4 mt-6">
-    <MudText Typo="Typo.h5" Color="Color.Primary">Danh sách các kho hiện có</MudText>
+<PageTitle>Danh sách kho</PageTitle>
 
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h3" GutterBottom="true">Danh sách các kho hiện có</MudText>
     @if (_maKhos == null)
     {
         <MudText Class="mt-2">Đang tải...</MudText>
@@ -34,6 +35,7 @@
     private void NavigateToKho(string maKho)
     {
         Navigation.NavigateTo($"/{maKho.ToLower().Replace(" ", "").Trim()}");
+        InventoryService.SetMaKho(maKho);
     }
 
     protected override async Task OnInitializedAsync()

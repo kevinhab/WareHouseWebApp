@@ -8,23 +8,33 @@ namespace WareHouseProject.Domain.Services
 {
     public class InventoryService
     {
+        public string maKhoIntern { get; set; }
+        public void SetMaKho(string maKho)
+        {
+            maKhoIntern = maKho;
+        }
+        public string GetMaKho()
+        {
+            return maKhoIntern;
+        }
+
         public async Task<List<VatTu>> GetAllAsync()
         {
             return await DB.Find<VatTu>()
-                           .Match(v => v.MaKho == "Kho 115")
+                           .Match(v => v.MaKho == maKhoIntern)
                            .ExecuteAsync();
         }
 
         public async Task AddAsync(VatTu vatTu)
         {
-            vatTu.MaKho = "Kho 115";
+            vatTu.MaKho = maKhoIntern;
             await vatTu.SaveAsync();
         }
 
         public async Task<bool> ExportAsync(string maVatTu, int soLuongXuat)
         {
             var vatTu = await DB.Find<VatTu>()
-                                .Match(v => v.MaVatTu == maVatTu && v.MaKho == "Kho 115")
+                                .Match(v => v.MaVatTu == maVatTu && v.MaKho == maKhoIntern)
                                 .ExecuteSingleAsync();
 
             if (vatTu == null || !vatTu.CanExport(soLuongXuat))
