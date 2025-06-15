@@ -10,23 +10,23 @@ namespace WareHouseProject.Domain.Services
         public async Task<List<VatTu>> GetAllAsync()
         {
             return await DB.Find<VatTu>()
-                           .Match(v => v.MaKho == "kho115")
+                           .Match(v => v.MaKho == "Kho 115")
                            .ExecuteAsync();
         }
 
         public async Task AddAsync(VatTu vatTu)
         {
-            vatTu.MaKho = "kho115";
+            vatTu.MaKho = "Kho 115";
             await vatTu.SaveAsync();
         }
 
         public async Task<bool> ExportAsync(string maVatTu, int soLuongXuat)
         {
             var vatTu = await DB.Find<VatTu>()
-                                .Match(v => v.MaVatTu == maVatTu && v.MaKho == "kho115")
+                                .Match(v => v.MaVatTu == maVatTu && v.MaKho == "Kho 115")
                                 .ExecuteSingleAsync();
 
-            if (vatTu == null || vatTu.SoLuong < soLuongXuat)
+            if (vatTu == null || !vatTu.CanExport(soLuongXuat))
                 return false;
 
             vatTu.SoLuong -= soLuongXuat;

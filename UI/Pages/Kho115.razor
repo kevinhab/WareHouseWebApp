@@ -9,23 +9,29 @@
     <MudText Typo="Typo.h5" GutterBottom="true">
         📦 Danh sách vật tư - Kho 115
     </MudText>
-
-    <MudTable Items="_dsVatTu" Dense="true" Hover="true" Bordered="true" Striped="true" Elevation="1">
-        <HeaderContent>
-            <MudTh>Mã vật tư</MudTh>
-            <MudTh>Model</MudTh>
-            <MudTh>Tên vật tư</MudTh>
-            <MudTh>Đơn vị tính</MudTh>
-            <MudTh Class="text-end">Số lượng</MudTh>
-        </HeaderContent>
-        <RowTemplate Context="context">
-            <MudTd DataLabel="Mã vật tư">@context.MaVatTu</MudTd>
-            <MudTd DataLabel="Model">@context.Model</MudTd>
-            <MudTd DataLabel="Tên vật tư">@context.TenVatTu</MudTd>
-            <MudTd DataLabel="Đơn vị tính">@context.DonViTinh</MudTd>
-            <MudTd DataLabel="Số lượng" Class="text-end">@context.SoLuong</MudTd>
-        </RowTemplate>
-    </MudTable>
+    @if (_dsVatTu == null)
+    {
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" />
+    }
+    else
+    {
+        <MudTable Items="_dsVatTu" Dense="true" Hover="true" Bordered="true" Striped="true" Elevation="1">
+            <HeaderContent>
+                <MudTh>Mã vật tư</MudTh>
+                <MudTh>Model</MudTh>
+                <MudTh>Tên vật tư</MudTh>
+                <MudTh>Đơn vị tính</MudTh>
+                <MudTh Class="text-end">Số lượng</MudTh>
+            </HeaderContent>
+            <RowTemplate Context="context">
+                <MudTd DataLabel="Mã vật tư">@context.MaVatTu</MudTd>
+                <MudTd DataLabel="Model">@context.Model</MudTd>
+                <MudTd DataLabel="Tên vật tư">@context.TenVatTu</MudTd>
+                <MudTd DataLabel="Đơn vị tính">@context.DonViTinh</MudTd>
+                <MudTd DataLabel="Số lượng" Class="text-end">@context.SoLuong</MudTd>
+            </RowTemplate>
+        </MudTable>
+       }
 </MudPaper>
 
 @code {
