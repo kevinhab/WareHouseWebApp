@@ -1,0 +1,44 @@
+﻿@using WareHouseProject.Domain.Models
+@inject WareHouseProject.Domain.Services.InventoryService InventoryService
+
+@page "/listkho"
+
+<MudPaper Class="pa-4 mt-6">
+    <MudText Typo="Typo.h5" Color="Color.Primary">Danh sách các kho hiện có</MudText>
+
+    @if (_maKhos == null)
+    {
+        <MudText Class="mt-2">Đang tải...</MudText>
+    }
+    else if (!_maKhos.Any())
+    {
+        <MudText Class="mt-2 text-error">Không tìm thấy mã kho nào.</MudText>
+    }
+    else
+    {
+        <MudList T="string">
+            @foreach (var maKho in _maKhos)
+            {
+                <MudListItem>@maKho</MudListItem>
+            }
+        </MudList>
+    }
+</MudPaper>
+
+@code {
+    private List<string> _maKhos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _maKhos = await InventoryService.GetDanhSachMaKhoAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Lỗi khi lấy danh sách mã kho: {ex.Message}");
+            _maKhos = new();
+        }
+    }
+}
+

@@ -1,7 +1,8 @@
-﻿using MongoDB.Entities;
-using WareHouseProject.Domain.Models;
+﻿using MongoDB.Driver;
+using MongoDB.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WareHouseProject.Domain.Models;
 
 namespace WareHouseProject.Domain.Services
 {
@@ -33,5 +34,19 @@ namespace WareHouseProject.Domain.Services
             await vatTu.SaveAsync();
             return true;
         }
+        public async Task<List<string>> GetDanhSachMaKhoAsync()
+        {
+            var danhSach = await DB.Find<VatTu>().ExecuteAsync();
+
+            // Dùng LINQ để lấy danh sách MaKho duy nhất
+            var dsMaKho = danhSach
+                            .Where(v => !string.IsNullOrWhiteSpace(v.MaKho))
+                            .Select(v => v.MaKho)
+                            .Distinct()
+                            .ToList();
+
+            return dsMaKho;
+        }
+
     }
 }
