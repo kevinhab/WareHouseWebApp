@@ -1,0 +1,46 @@
+﻿@page "/nhapkho"
+@inject WareHouseProject.Domain.Services.InventoryService InventoryService
+@using WareHouseProject.Domain.Models
+@using MudBlazor
+
+<PageTitle>Nhập kho</PageTitle>
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5" GutterBottom="true">📝 Nhập vật tư mới</MudText>
+
+    <MudForm @ref="_form">
+        <MudTextField @bind-Value="_vatTu.MaVatTu" Label="Mã vật tư" Required="true" />
+        <MudTextField @bind-Value="_vatTu.Model" Label="Model" Required="true" />
+        <MudTextField @bind-Value="_vatTu.TenVatTu" Label="Tên vật tư" Required="true" />
+        <MudTextField @bind-Value="_vatTu.DonViTinh" Label="Đơn vị tính" Required="true" />
+        <MudNumericField T="int" @bind-Value="_vatTu.SoLuong" Label="Số lượng" Required="true" Min="1" />
+
+        <MudButton OnClick="Submit" Color="Color.Primary" Variant="Variant.Filled" Class="mt-3">
+            Nhập kho
+        </MudButton>
+    </MudForm>
+
+    @if (_successMessage is not null)
+    {
+        <MudAlert Severity="Severity.Success" Elevation="1" Class="mt-3">
+            @_successMessage
+        </MudAlert>
+    }
+</MudPaper>
+
+@code {
+    private VatTu _vatTu = new();
+    private MudForm _form;
+    private string _successMessage;
+
+    private async Task Submit()
+    {
+        await _form.Validate();
+        if (!_form.IsValid)
+            return;
+
+        await InventoryService.AddAsync(_vatTu);
+        _successMessage = $"✔ Vật tư '{_vatTu.TenVatTu}' đã được nhập vào kho.";
+        _vatTu = new(); // reset form
+    }
+}
