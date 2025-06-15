@@ -1,5 +1,6 @@
 ﻿@using WareHouseProject.Domain.Models
 @inject WareHouseProject.Domain.Services.InventoryService InventoryService
+@inject NavigationManager Navigation
 
 @page "/listkho"
 
@@ -19,7 +20,9 @@
         <MudList T="string">
             @foreach (var maKho in _maKhos)
             {
-                <MudListItem>@maKho</MudListItem>
+                <MudListItem T="string" OnClick="() => NavigateToKho(maKho)" Class="cursor-pointer">
+                    @maKho
+                </MudListItem>
             }
         </MudList>
     }
@@ -27,6 +30,11 @@
 
 @code {
     private List<string> _maKhos;
+
+    private void NavigateToKho(string maKho)
+    {
+        Navigation.NavigateTo($"/{maKho.ToLower().Replace(" ", "").Trim()}");
+    }
 
     protected override async Task OnInitializedAsync()
     {
