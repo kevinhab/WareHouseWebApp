@@ -1,0 +1,54 @@
+﻿@page "/xuatkho"
+@inject WareHouseProject.Domain.Services.InventoryService InventoryService
+@using MudBlazor
+
+<PageTitle>Xuất kho</PageTitle>
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5" GutterBottom="true">📤 Xuất vật tư</MudText>
+
+    <MudForm @ref="_form">
+        <MudTextField @bind-Value="_maVatTu" Label="Mã vật tư" Required="true" />
+        <MudNumericField T="int" @bind-Value="_soLuongXuat" Label="Số lượng xuất" Required="true" Min="1" />
+
+        <MudButton OnClick="XuatVatTu" Color="Color.Error" Variant="Variant.Filled" Class="mt-3">
+            Xuất kho
+        </MudButton>
+    </MudForm>
+
+    @if (_message is not null)
+    {
+        <MudAlert Severity="@_severity" Elevation="1" Class="mt-3">@_message</MudAlert>
+    }
+</MudPaper>
+
+@code {
+    private string _maVatTu;
+    private int _soLuongXuat;
+    private MudForm _form;
+    private string _message;
+    private Severity _severity = Severity.Info;
+
+    private async Task XuatVatTu()
+    {
+        await _form.Validate();
+        if (!_form.IsValid)
+            return;
+
+        var success = await InventoryService.ExportAsync(_maVatTu, _soLuongXuat);
+        if (success)
+        {
+            _message = $"✔ Xuất {_soLuongXuat} đơn vị khỏi vật tư '{_maVatTu}' thành công.";
+            _severity = Severity.Success;
+        }
+        else
+        {
+            _message = $"⚠ Không thể xuất kho. Mã vật tư không tồn tại hoặc số lượng không đủ.";
+            _severity = Severity.Warning;
+        }
+
+        // reset form
+        _maVatTu = string.Empty;
+        _soLuongXuat = 0;
+    }
+}

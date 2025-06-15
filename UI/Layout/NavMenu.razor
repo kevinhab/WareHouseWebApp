@@ -1,13 +1,12 @@
 ﻿@using MudBlazor
 
 <MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+    <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
     <MudNavLink Href="/kho115" Icon="@Icons.Material.Filled.Warehouse">
         Kho 115
     </MudNavLink>
-    <MudNavGroup Title="Settings" Expanded="true">
-        <MudNavLink Href="/users" Match="NavLinkMatch.Prefix">Users</MudNavLink>
-        <MudNavLink Href="/security" Match="NavLinkMatch.Prefix">Security</MudNavLink>
+    <MudNavGroup Title="Quản lý kho" Expanded="true">
+        <MudNavLink Href="/nhapkho" Icon="@Icons.Material.Filled.AddBox">Nhập kho</MudNavLink>
+        <MudNavLink Href="/xuatkho" Icon="@Icons.Material.Filled.Outbox">Xuất kho</MudNavLink>
     </MudNavGroup>
-    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix">About</MudNavLink>
 </MudNavMenu>
