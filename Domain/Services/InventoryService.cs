@@ -59,6 +59,12 @@ namespace WareHouseProject.Domain.Services
 
             return dsMaKho;
         }
+        public async Task<VatTu?> FindByMaVatTuAsync(string maVatTu)
+        {
+            return await DB.Find<VatTu>()
+                           .Match(v => v.MaVatTu == maVatTu && v.MaKho == maKhoIntern)
+                           .ExecuteSingleAsync();
+        }
 
     }
 }
