@@ -2,6 +2,7 @@
 @inject WareHouseProject.Domain.Services.InventoryService InventoryService
 @using WareHouseProject.Domain.Models
 @using MudBlazor
+@using MongoDB.Entities
 
 <PageTitle>Nhập kho</PageTitle>
 
@@ -9,10 +10,31 @@
     <MudText Typo="Typo.h5" GutterBottom="true">📝 Nhập vật tư mới</MudText>
 
     <MudForm @ref="_form">
-        <MudTextField @bind-Value="_vatTu.MaVatTu" Label="Mã vật tư" Required="true" />
-        <MudTextField @bind-Value="_vatTu.Model" Label="Model" Required="true" />
-        <MudTextField @bind-Value="_vatTu.TenVatTu" Label="Tên vật tư" Required="true" />
-        <MudTextField @bind-Value="_vatTu.DonViTinh" Label="Đơn vị tính" Required="true" />
+        <MudTextField @bind-Value="_vatTu.MaVatTu"
+                      Label="Mã vật tư"
+                      Required="true"
+                      Immediate="true"
+                      OnBlur="OnMaVatTuChanged" />
+        @if (_isExistingVatTu)
+        {
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mt-2">
+                Vật tư đã tồn tại – chỉ có thể cập nhật số lượng.
+            </MudAlert>
+        }
+        <MudTextField @bind-Value="_vatTu.Model"
+                      Label="Model"
+                      Required="true"
+                      Disabled="_isExistingVatTu" />
+
+        <MudTextField @bind-Value="_vatTu.TenVatTu"
+                      Label="Tên vật tư"
+                      Required="true"
+                      Disabled="_isExistingVatTu" />
+
+        <MudTextField @bind-Value="_vatTu.DonViTinh"
+                      Label="Đơn vị tính"
+                      Required="true"
+                      Disabled="_isExistingVatTu" />
         <MudNumericField T="int" @bind-Value="_vatTu.SoLuong" Label="Số lượng" Required="true" Min="1" />
 
         <MudButton OnClick="Submit" Color="Color.Primary" Variant="Variant.Filled" Class="mt-3">
@@ -39,8 +61,40 @@
         if (!_form.IsValid)
             return;
 
-        await InventoryService.AddAsync(_vatTu);
-        _successMessage = $"✔ Vật tư '{_vatTu.TenVatTu}' đã được nhập vào kho.";
-        _vatTu = new(); // reset form
+        if (_isExistingVatTu)
+        {
+            var existing = await InventoryService.FindByMaVatTuAsync(_vatTu.MaVatTu);
+            existing.SoLuong += _vatTu.SoLuong;
+            await existing.SaveAsync();
+            _successMessage = $"✔ Đã cập nhật số lượng cho '{existing.TenVatTu}'.";
+        }
+        else
+        {
+            await InventoryService.AddAsync(_vatTu);
+            _successMessage = $"✔ Vật tư mới '{_vatTu.TenVatTu}' đã được thêm vào kho.";
+        }
+
+        _vatTu = new(); // reset
+    }
+
+    private bool _isExistingVatTu = false;
+
+    private async Task OnMaVatTuChanged()
+    {
+        var existing = await InventoryService.FindByMaVatTuAsync(_vatTu.MaVatTu);
+        if (existing != null)
+        {
+            _vatTu.Model = existing.Model;
+            _vatTu.TenVatTu = existing.TenVatTu;
+            _vatTu.DonViTinh = existing.DonViTinh;
+            _isExistingVatTu = true;
+        }
+        else
+        {
+            _vatTu.Model = string.Empty;
+            _vatTu.TenVatTu = string.Empty;
+            _vatTu.DonViTinh = string.Empty;
+            _isExistingVatTu = false;
+        }
     }
 }
