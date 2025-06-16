@@ -1,12 +1,58 @@
 ﻿@using MudBlazor
+@inject WareHouseProject.Domain.Services.InventoryService InventoryService
 
 <MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
     <MudNavLink Href="/listkho" Icon="@Icons.Material.Filled.Warehouse">
         Danh sách kho
     </MudNavLink>
-    <MudNavGroup Title="Quản lý kho" Expanded="true">
-        <MudNavLink Href="/nhapkho" Icon="@Icons.Material.Filled.AddBox">Nhập kho</MudNavLink>
-        <MudNavLink Href="/xuatkho" Icon="@Icons.Material.Filled.Outbox">Xuất kho</MudNavLink>
+    <MudNavGroup Title="@_maKhoTitle" Expanded="true" Class="@(!_isKhoSelected ? "mud-disabled" : null)">
+        <MudNavLink Href="/nhapkho"
+                    Icon="@Icons.Material.Filled.AddBox"
+                    Disabled="@(!_isKhoSelected)">
+            Nhập kho
+        </MudNavLink>
+
+        <MudNavLink Href="/xuatkho"
+                    Icon="@Icons.Material.Filled.Outbox"
+                    Disabled="@(!_isKhoSelected)">
+            Xuất kho
+        </MudNavLink>
     </MudNavGroup>
 </MudNavMenu>
+
+@code {
+    private string _maKhoTitle;
+    private bool _isKhoSelected = false;
+    protected override void OnInitialized()
+    {
+        InventoryService.OnMaKhoChanged += Refresh;
+    }
+
+    private void Refresh()
+    {
+        _maKhoTitle = InventoryService.GetMaKho();
+        _isKhoSelected = !string.IsNullOrEmpty(_maKhoTitle);
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        InventoryService.OnMaKhoChanged -= Refresh;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var maKho = InventoryService.GetMaKho();
+        if (!string.IsNullOrEmpty(maKho))
+        {
+            _maKhoTitle = maKho;
+            _isKhoSelected = true;
+        }
+        else
+        {
+            _maKhoTitle = "Kho chưa được xác định";
+            _isKhoSelected = false;
+        }
+    }
+}

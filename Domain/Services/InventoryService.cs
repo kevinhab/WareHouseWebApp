@@ -9,9 +9,11 @@ namespace WareHouseProject.Domain.Services
     public class InventoryService
     {
         public string maKhoIntern { get; set; }
+        public event Action OnMaKhoChanged;
         public void SetMaKho(string maKho)
         {
             maKhoIntern = maKho;
+            OnMaKhoChanged?.Invoke();
         }
         public string GetMaKho()
         {

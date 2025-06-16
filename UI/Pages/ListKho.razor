@@ -8,6 +8,7 @@
 
 <MudPaper Class="pa-4">
     <MudText Typo="Typo.h3" GutterBottom="true">Danh sách các kho hiện có</MudText>
+    <MudText Typo="Typo.subtitle2" GutterBottom="true">Chọn kho để xem chi tiết</MudText>
     @if (_maKhos == null)
     {
         <MudText Class="mt-2">Đang tải...</MudText>
@@ -34,7 +35,7 @@
 
     private void NavigateToKho(string maKho)
     {
-        Navigation.NavigateTo($"/{maKho.ToLower().Replace(" ", "").Trim()}");
+        Navigation.NavigateTo($"/{maKho}");
         InventoryService.SetMaKho(maKho);
     }
 

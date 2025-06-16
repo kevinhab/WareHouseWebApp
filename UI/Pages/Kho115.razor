@@ -1,7 +1,7 @@
 ﻿@using WareHouseProject.Domain.Models
 @inject WareHouseProject.Domain.Services.InventoryService InventoryService
 
-@page "/kho115"
+@page "/kho115_old"
 
 <PageTitle>Kho @_maKho</PageTitle>
 
@@ -37,8 +37,12 @@
 @code {
     private List<VatTu> _dsVatTu = [];
 
+    private string _maKho;
+
     protected override async Task OnInitializedAsync()
     {
+        _maKho = InventoryService.GetMaKho();
         _dsVatTu = await InventoryService.GetAllAsync();
+
     }
 }

@@ -1,0 +1,7 @@
+﻿@page "/{maKhoDynamic}"
+@using WareHouseProject.UI.Components
+@code {
+    [Parameter] public string maKhoDynamic { get; set; }
+}
+
+<KhoChiTiet MaKhoStaticPage="@maKhoDynamic" />
