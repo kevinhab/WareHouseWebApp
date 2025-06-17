@@ -1,6 +1,7 @@
 ﻿using MudBlazor.Services;
 using WareHouseProject.Domain.Services;
 using WareHouseProject.Infrastructure.Database;
+using WareHouseProject.Infrastructure.GRPC;
 using WareHouseProject.UI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,5 +34,7 @@ app.MapRazorComponents<App>()
 
 //builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 await DBContext.InitAsync(builder.Configuration);
+
+app.MapGrpcService<WarehouseService>();
 
 app.Run();
