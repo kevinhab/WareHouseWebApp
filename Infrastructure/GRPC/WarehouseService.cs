@@ -1,25 +1,18 @@
 ﻿using Grpc.Core;
+using WareHouseWebApp.Services;
 
 
 namespace WareHouseProject.Infrastructure.GRPC
 {
-    public class WarehouseService : Greeter.GreeterBase
+    public class WarehouseService : InventoryService.InventoryServiceBase
     {
-        private readonly ILogger<WarehouseService> _logger;
-
-        public WarehouseService(ILogger<WarehouseService> logger)
+        public override Task<ItemReply> GetItem(ItemRequest request, ServerCallContext context)
         {
-            _logger = logger;
-        }
-
-        public override Task<HelloReply> SayHello(HelloRequest request,
-            ServerCallContext context)
-        {
-            _logger.LogInformation("Saying hello to {Name}", request.Name);
-
-            return Task.FromResult(new HelloReply 
+            // Giả lập dữ liệu
+            return Task.FromResult(new ItemReply
             {
-                Message = "Hello " + request.Name
+                Name = "Sample Item",
+                Quantity = 42
             });
         }
     }

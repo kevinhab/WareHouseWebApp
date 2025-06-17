@@ -14,6 +14,8 @@ builder.Services.AddScoped<InventoryService>();
 
 builder.Services.AddMudServices(); // Bắt buộc khi dùng MudBlazor!
 
+builder.Services.AddGrpc();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
