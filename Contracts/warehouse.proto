@@ -1,3 +1,16 @@
 syntax = "proto3";
 
-option csharp_namespace = "WareHouseProject.Contracts";
+option csharp_namespace = "WareHouseWebApp.Services";
+
+service InventoryService {
+  rpc GetItem (ItemRequest) returns (ItemReply);
+}
+
+message ItemRequest {
+  int32 id = 1;
+}
+
+message ItemReply {
+  string name = 1;
+  int32 quantity = 2;
+}
